@@ -136,16 +136,9 @@ exports.getUser = async (req, res) => {
 
 exports.addFavorite = async (req, res) => {
   try {
-    const { userId, favoriteId } = req.params;
+    const { favoriteId } = req.params;
 
-    // Find the user by ID
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = req.user;
 
     if (!favoriteId || typeof favoriteId !== "string") {
       return res.status(404).json({ message: "Invalid listing Id" });
@@ -171,16 +164,9 @@ exports.addFavorite = async (req, res) => {
 
 exports.removeFavorite = async (req, res) => {
   try {
-    const { userId, favoriteId } = req.params;
+    const { favoriteId } = req.params;
 
-    // Find the user by ID
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = req.user;
 
     if (!favoriteId || typeof favoriteId !== "string") {
       return res.status(404).json({ message: "Invaid listing Id" });

@@ -11,10 +11,7 @@ router.use(authenticateToken);
 
 router.post("/signOut", authController.signOut);
 router.get("/user", authController.getUser);
-router.post("/addFavorite/:userId/:favoriteId", authController.addFavorite);
-router.delete(
-  "/removeFavorite/:userId/:favoriteId",
-  authController.removeFavorite
-);
+router.post("/addFavorite/:favoriteId", authController.addFavorite);
+router.delete("/removeFavorite/:favoriteId", authController.removeFavorite);
 
 module.exports = router;
