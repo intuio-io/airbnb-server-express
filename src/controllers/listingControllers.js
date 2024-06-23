@@ -35,18 +35,81 @@ exports.addListing = async (req, res) => {
 
 exports.getListings = async (req, res) => {
   try {
+    const {
+      userId,
+      roomCount,
+      guestCount,
+      bathroomCount,
+      locationValue,
+      startDate,
+      endDate,
+      category,
+    } = req?.query;
+    const query = {};
+
+    if (userId) {
+      query.userId = userId;
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (roomCount) {
+      query.roomCount = {
+        gte: +roomCount, // greater then or equal
+      };
+    }
+
+    if (guestCount) {
+      query.guestCount = {
+        gte: +guestCount, // greater then or equal
+      };
+    }
+
+    if (bathroomCount) {
+      query.bathroomCount = {
+        gte: +bathroomCount, // greater then or equal
+      };
+    }
+
+    if (startDate && endDate) {
+      query.NOT = {
+        reservations: {
+          some: {
+            OR: [
+              {
+                endDate: { gte: startDate },
+                startDate: { lte: startDate },
+              },
+              {
+                startDate: { lte: endDate },
+                endDate: { gte: endDate },
+              },
+            ],
+          },
+        },
+      };
+    }
+
     // Fetch all listings ordered by createdAt in descending order
     const listings = await prisma.listing.findMany({
+      where: query,
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    if (!listings) {
-      return res.status(404).json({ message: "Listing not found" });
+    let filteredListings = listings;
+
+    if (locationValue) {
+      // Filter listings based on locationValue using raw SQL
+      filteredListings = listings.filter((listing) => {
+        return listing.locationValue["value"] === locationValue;
+      });
     }
 
-    res.status(200).json(listings);
+    res.status(200).json(filteredListings);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -67,6 +130,45 @@ exports.getListingById = async (req, res) => {
     if (!listing) {
       return res.status(404).json({ message: "No listing found" });
     }
+
+    return res.status(200).json(listing);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getFavoriteListings = async (req, res) => {
+  try {
+    const user = req.user;
+    const favorites = await prisma.listing.findMany({
+      where: {
+        id: {
+          in: [...(user.favoriteIds || [])],
+        },
+      },
+    });
+    res.status(200).json(favorites);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteListing = async (req, res) => {
+  try {
+    const { listingId } = req.params;
+
+    const user = req.user;
+
+    if (!listingId || typeof listingId !== "string") {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+
+    const listing = await prisma.listing.deleteMany({
+      where: {
+        id: listingId,
+        userId: user.id,
+      },
+    });
 
     return res.status(200).json(listing);
   } catch (error) {

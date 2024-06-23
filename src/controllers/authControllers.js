@@ -33,7 +33,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ ...result, token });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -88,7 +88,7 @@ exports.signin = async (req, res) => {
 
     res.json({ token });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -119,7 +119,7 @@ exports.signOut = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     if (!req?.user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(403).json({ message: "User not found" });
     }
     // Clone the req.user object to avoid mutating the original
     const sanitizedUser = { ...req.user };

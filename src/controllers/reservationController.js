@@ -52,7 +52,7 @@ exports.getReservations = async (req, res) => {
       query.listing = { userId: req.query.authorId };
     }
 
-    const reservatiions = await prisma.reservation.findMany({
+    const reservations = await prisma.reservation.findMany({
       where: query,
       include: {
         listing: true,
@@ -62,7 +62,7 @@ exports.getReservations = async (req, res) => {
       },
     });
 
-    res.status(200).json(reservatiions);
+    res.status(200).json(reservations);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
