@@ -1,4 +1,5 @@
 const prisma = require("../../prisma");
+const { getIO } = require("../utils/socketManager");
 
 // validations
 const { listingSchema } = require("../validationSchemas/listingSchema");
@@ -23,6 +24,10 @@ exports.addListing = async (req, res) => {
         price: req.body.price,
       },
     });
+
+    const io = getIO();
+    // Emit an event when listings are fetched or updated
+    io.emit("listingsUpdated");
 
     // Respond with the newly created listing
     res
