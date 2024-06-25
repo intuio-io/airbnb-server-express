@@ -1,3 +1,15 @@
+/**
+ * Author: Intuio.io
+ * Date: 2024
+ * Description: Brief description of the component
+ *
+ * Copyright (c) 2024 Your Company Name
+ * All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = require("../../prisma");
