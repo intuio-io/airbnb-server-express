@@ -61,6 +61,7 @@ exports.getReservations = async (req, res) => {
       where: query,
       include: {
         listing: true,
+        user: true,
       },
       orderBy: {
         createdAt: "desc",
