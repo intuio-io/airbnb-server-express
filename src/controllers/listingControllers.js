@@ -175,6 +175,10 @@ exports.deleteListing = async (req, res) => {
       },
     });
 
+    const io = getIO();
+    // Emit an event when listings are fetched or updated
+    io.emit("listingsDeleted");
+
     return res.status(200).json(listing);
   } catch (error) {
     res.status(500).json({ message: error.message });

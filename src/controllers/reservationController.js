@@ -1,4 +1,5 @@
 const prisma = require("../../prisma");
+const { getIO } = require("../utils/socketManager");
 
 // validations
 const { reservationSchema } = require("../validationSchemas/reservationSchema");
@@ -25,6 +26,10 @@ exports.addReservation = async (req, res) => {
         },
       },
     });
+
+    const io = getIO();
+    // Emit an event when listings are fetched or updated
+    io.emit("reservationsUpdated");
 
     res.status(201).json({
       success: "message",
@@ -82,6 +87,10 @@ exports.deleteReservation = async (req, res) => {
         OR: [{ userId: req.user.id }, { listing: { userId: req.user.id } }],
       },
     });
+
+    const io = getIO();
+    // Emit an event when listings are fetched or updated
+    io.emit("reservationsDeleted");
 
     return res
       .status(201)
