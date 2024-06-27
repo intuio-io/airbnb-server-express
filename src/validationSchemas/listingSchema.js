@@ -18,7 +18,7 @@ const listingSchema = Joi.object({
   bathroomCount: Joi.number().integer().min(1).required(),
   guestCount: Joi.number().integer().min(1).required(),
   location: locationSchema.required(),
-  userId: Joi.string().length(24).hex().required(),
+  userId: Joi.required(),
   price: Joi.number().integer().min(1).required(),
 });
 

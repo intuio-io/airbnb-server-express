@@ -1,6 +1,9 @@
 const prisma = require("../../prisma");
 const { getIO } = require("../utils/socketManager");
 
+// utils
+const { parseValue } = require("../utils/parseValue");
+
 // validations
 const { reservationSchema } = require("../validationSchemas/reservationSchema");
 
@@ -13,7 +16,7 @@ exports.addReservation = async (req, res) => {
   try {
     const listingAndReservation = await prisma.listing.update({
       where: {
-        id: req.body.listingId,
+        id: parseValue(req.body.listingId),
       },
       data: {
         reservations: {
@@ -46,15 +49,15 @@ exports.getReservations = async (req, res) => {
     const query = {};
 
     if (req.query.listingId) {
-      query.listingId = req.query.listingId;
+      query.listingId = parseValue(req.query.listingId);
     }
 
     if (req.query.userId) {
-      query.userId = req.query.userId;
+      query.userId = parseValue(req.query.userId);
     }
 
     if (req.query.authorId) {
-      query.listing = { userId: req.query.authorId };
+      query.listing = { userId: parseValue(req.query.authorId) };
     }
 
     const reservations = await prisma.reservation.findMany({
@@ -78,14 +81,17 @@ exports.deleteReservation = async (req, res) => {
   try {
     const { reservationId } = req.params;
 
-    if (!reservationId || typeof reservationId !== "string") {
+    if (!reservationId) {
       return res.status(400).json({ message: "Invalid ID" });
     }
 
     const reservation = await prisma.reservation.deleteMany({
       where: {
-        id: reservationId,
-        OR: [{ userId: req.user.id }, { listing: { userId: req.user.id } }],
+        id: parseValue(reservationId),
+        OR: [
+          { userId: parseValue(req.user.id) },
+          { listing: { userId: parseValue(req.user.id) } },
+        ],
       },
     });
 

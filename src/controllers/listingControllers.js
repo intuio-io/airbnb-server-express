@@ -1,6 +1,9 @@
 const prisma = require("../../prisma");
 const { getIO } = require("../utils/socketManager");
 
+// utils
+const { parseValue } = require("../utils/parseValue");
+
 // validations
 const { listingSchema } = require("../validationSchemas/listingSchema");
 
@@ -53,7 +56,7 @@ exports.getListings = async (req, res) => {
     const query = {};
 
     if (userId) {
-      query.userId = userId;
+      query.userId = parseValue(userId);
     }
 
     if (category) {
@@ -125,7 +128,7 @@ exports.getListingById = async (req, res) => {
     const { listingId } = req.params;
     const listing = await prisma.listing.findUnique({
       where: {
-        id: listingId,
+        id: parseValue(listingId),
       },
       include: {
         user: true,
@@ -145,10 +148,12 @@ exports.getListingById = async (req, res) => {
 exports.getFavoriteListings = async (req, res) => {
   try {
     const user = req.user;
+    const parseFavoriteIds = user.favoriteIds.map((id) => parseValue(id));
+
     const favorites = await prisma.listing.findMany({
       where: {
         id: {
-          in: [...(user.favoriteIds || [])],
+          in: [...(parseFavoriteIds || [])],
         },
       },
     });
@@ -164,14 +169,14 @@ exports.deleteListing = async (req, res) => {
 
     const user = req.user;
 
-    if (!listingId || typeof listingId !== "string") {
+    if (!listingId) {
       return res.status(400).json({ message: "Invalid ID" });
     }
 
     const listing = await prisma.listing.deleteMany({
       where: {
-        id: listingId,
-        userId: user.id,
+        id: parseValue(listingId),
+        userId: parseValue(user.id),
       },
     });
 

@@ -18,6 +18,9 @@ const prisma = require("../../prisma");
 const { registerSchema } = require("../validationSchemas/authSchema");
 const { signInSchema } = require("../validationSchemas/authSchema");
 
+// utils
+const { parseValue } = require("../utils/parseValue");
+
 exports.register = async (req, res) => {
   const { error } = registerSchema.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
@@ -136,6 +139,11 @@ exports.getUser = async (req, res) => {
     // Clone the req.user object to avoid mutating the original
     const sanitizedUser = { ...req.user };
 
+    // Transform favoriteIds to an array of numbers or strings
+    sanitizedUser.favoriteIds = sanitizedUser.favoriteIds.map((id) =>
+      parseValue(id)
+    );
+
     // Delete the tokens field from the sanitized user object
     delete sanitizedUser.tokens;
 
@@ -152,7 +160,7 @@ exports.addFavorite = async (req, res) => {
 
     const user = req.user;
 
-    if (!favoriteId || typeof favoriteId !== "string") {
+    if (!favoriteId) {
       return res.status(404).json({ message: "Invalid listing Id" });
     }
 
@@ -162,7 +170,7 @@ exports.addFavorite = async (req, res) => {
 
     // Add the new favoriteId to the user's favorites array
     const updatedUser = await prisma.user.update({
-      where: { id: user?.id },
+      where: { id: parseValue(user?.id) },
       data: {
         favoriteIds,
       },
@@ -180,7 +188,7 @@ exports.removeFavorite = async (req, res) => {
 
     const user = req.user;
 
-    if (!favoriteId || typeof favoriteId !== "string") {
+    if (!favoriteId) {
       return res.status(404).json({ message: "Invaid listing Id" });
     }
 
@@ -190,7 +198,7 @@ exports.removeFavorite = async (req, res) => {
 
     // Add the new favoriteId to the user's favorites array
     const updatedUser = await prisma.user.update({
-      where: { id: user?.id },
+      where: { id: parseValue(user?.id) },
       data: {
         favoriteIds,
       },
