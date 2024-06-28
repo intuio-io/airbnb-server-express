@@ -13,7 +13,7 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
    git clone https://github.com/intuio-io/rapidstay-express.git
 
    # once cloned go to the repo
-   cd cd rapidstay-express
+   cd rapidstay-express
    ```
 
 2. **Verify your node version**
