@@ -86,13 +86,20 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
    - Run the below command
 
      ```bash
-     npx prisma init
+     npx prisma generate
      ```
 
    - Go to the prisma folder it should be in the root directory, inside there, there should be file called mongoSchema you’ll have to copy the contents of the file and paste it in the schema.prisma file
    - finally run the following command
+
      ```bash
      npx prisma db push
+     ```
+
+   - Once you have executed the above command run the following command
+     ```bash
+     # this will seed data in to your db
+     npm run seeder
      ```
 
 8. **Run the project to start your development server**
@@ -137,13 +144,21 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
    - Run the below command
 
      ```bash
-     npx prisma init
+     npx prisma generate
      ```
 
    - Go to the prisma folder it should be in the root directory, inside there, there should be file called mysqlSchema you’ll have to copy the contents of the file and paste it in the schema.prisma file
-   - finally run the following command
+   - Run the following command
+
      ```bash
      npx prisma migrate dev --name init
+     ```
+
+   - Once you have executed the above command run the following command
+
+     ```bash
+     # this will seed data in to your db
+     npm run seeder
      ```
 
 5. **Run the project to start your development server**
@@ -152,3 +167,10 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
    ```
 
 You're all set! The project should now be running on your local server.
+
+## You have now successfully setup your backend. Now proceed on setting up a front end of your choice.
+
+Web
+
+- React : https://github.com/intuio-io/rapidstay-reactjs
+- Next.js : https://github.com/intuio-io/rapidstay-nextjs
