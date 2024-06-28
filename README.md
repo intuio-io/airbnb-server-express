@@ -83,14 +83,14 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
 
 7. **Set Up Prisma, Push the Prisma schema to the database:**
 
-   - Run the below command
+   - Go to the prisma folder it should be in the root directory, inside there, there should be file called `mongoSchema` you’ll have to copy the contents of the file and paste it in the `schema.prisma` file
+   - finally run the following command
+
+   - After the above step is done, run the below command
 
      ```bash
      npx prisma generate
      ```
-
-   - Go to the prisma folder it should be in the root directory, inside there, there should be file called mongoSchema you’ll have to copy the contents of the file and paste it in the schema.prisma file
-   - finally run the following command
 
      ```bash
      npx prisma db push
@@ -109,7 +109,7 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
 
 ## Below steps apply for msyql setup with express
 
-1. **Install MongoDB Community Edition**
+1. **Install Myql**
    Follow the instructions to install Mysql: [Install Mysql](https://dev.mysql.com/downloads/installer/)
 
 2. **After installing mysql, follow this instructions**
@@ -141,14 +141,14 @@ Also make sure you have mongodb or mysql installed for db you can go through thi
 
 4. **Set Up Prisma, Push the Prisma schema to the database:**
 
-   - Run the below command
+   - Go to the prisma folder it should be in the root directory, inside there, there should be file called `mysqlSchema` you’ll have to copy the contents of the file and paste it in the `schema.prisma` file
+   - Run the following command
+
+   - After the above set is done, run the below command
 
      ```bash
      npx prisma generate
      ```
-
-   - Go to the prisma folder it should be in the root directory, inside there, there should be file called mysqlSchema you’ll have to copy the contents of the file and paste it in the schema.prisma file
-   - Run the following command
 
      ```bash
      npx prisma migrate dev --name init

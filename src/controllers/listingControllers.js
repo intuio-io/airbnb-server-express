@@ -35,7 +35,7 @@ exports.addListing = async (req, res) => {
     // Respond with the newly created listing
     res
       .status(201)
-      .json({ success: "success", message: "Listing created successfuly!" });
+      .json({ success: "success", message: "Property added successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -184,7 +184,9 @@ exports.deleteListing = async (req, res) => {
     // Emit an event when listings are fetched or updated
     io.emit("listingsDeleted");
 
-    return res.status(200).json(listing);
+    return res
+      .status(200)
+      .json({ listing, message: "Property removed successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -176,7 +176,7 @@ exports.addFavorite = async (req, res) => {
       },
     });
 
-    res.status(200).json(updatedUser);
+    res.status(200).json({ message: "Added to favorites", updatedUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -204,7 +204,7 @@ exports.removeFavorite = async (req, res) => {
       },
     });
 
-    res.status(200).json(updatedUser);
+    res.status(200).json({ message: "Removed from favorites" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

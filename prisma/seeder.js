@@ -7,7 +7,8 @@ async function main() {
     data: {
       name: "Shridatt",
       email: "shridatt@intuio.io",
-      hashedPassword: "blueSky",
+      hashedPassword:
+        "$2a$10$ED4j.DIC87Un3Sd4MsnI9uwKQufnvw.swRXZQOTzR8AM2CLOpEu8K",
       favoriteIds: [],
       tokens: [],
     },

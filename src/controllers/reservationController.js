@@ -36,7 +36,7 @@ exports.addReservation = async (req, res) => {
 
     res.status(201).json({
       success: "message",
-      message: "Reservation created successfully!",
+      message: "Reservation created successfully",
       listingAndReservation: listingAndReservation,
     });
   } catch (error) {
@@ -101,7 +101,7 @@ exports.deleteReservation = async (req, res) => {
 
     return res
       .status(201)
-      .json({ message: "cancelled successfully", reservation });
+      .json({ message: "Reservation cancelled successfully", reservation });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
