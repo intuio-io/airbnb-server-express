@@ -26,6 +26,15 @@ exports.register = async (req, res) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
 
   try {
+    // Check if the email already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email: req.body.email },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already in use" });
+    }
+
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const result = await prisma.user.create({
       data: {
@@ -46,7 +55,9 @@ exports.register = async (req, res) => {
       },
     });
 
-    res.status(201).json({ ...result, token });
+    res
+      .status(201)
+      .json({ ...result, token, message: "Logged in successfully!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -101,7 +112,7 @@ exports.signin = async (req, res) => {
       },
     });
 
-    res.json({ token });
+    res.status(201).json({ token, message: "Logged in successfully!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

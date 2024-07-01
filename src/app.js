@@ -12,11 +12,11 @@ const server = http.createServer(app);
 
 // Define CORS options
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN, // Allows requests only from the specified origin
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Specify allowed HTTP methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
-  credentials: true, // Allow sending of cookies and session tokens
-  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  // origin: process.env.CORS_ORIGIN, // Allows requests only from the specified origin
+  // methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Specify allowed HTTP methods
+  // allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+  // credentials: true, // Allow sending of cookies and session tokens
+  // optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 // Initialize Socket.IO using the socket manager

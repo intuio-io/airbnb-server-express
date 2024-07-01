@@ -1,33 +1,36 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-// mysql://root:@127.0.0.1:3306/rapidstay
+// "mongodb://localhost:27001/airbnb"
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
   name           String
   email          String   @unique
   image          String?
   hashedPassword String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  favoriteIds    Json     @default("[]")
-  tokens         Json     @default("[]")
+  favoriteIds    String[] @db.ObjectId
+  tokens         Json[]
 
   listings     Listing[]
   reservations Reservation[]
 }
 
 model Listing {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
   imageSrc      String
@@ -37,22 +40,22 @@ model Listing {
   bathroomCount Int
   guestCount    Int
   locationValue Json
-  userId        Int
-  price         Float
+  userId        String   @db.ObjectId
+  price         Int
 
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
 }
 
 model Reservation {
-  id         Int      @id @default(autoincrement())
-  userId     Int?
-  listingId  Int?
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?  @db.ObjectId
+  listingId  String?  @db.ObjectId
   startDate  DateTime
   endDate    DateTime
-  totalPrice Float
+  totalPrice Int
   createdAt  DateTime @default(now())
 
-  user    User?    @relation(fields: [userId], references: [id])
-  listing Listing? @relation(fields: [listingId], references: [id])
+  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
