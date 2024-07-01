@@ -10,27 +10,27 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             Int      @id @default(autoincrement())
   name           String
   email          String   @unique
   image          String?
   hashedPassword String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  favoriteIds    String[] @db.ObjectId
-  tokens         Json[]
+  favoriteIds    Json     @default("[]")
+  tokens         Json     @default("[]")
 
   listings     Listing[]
   reservations Reservation[]
 }
 
 model Listing {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            Int      @id @default(autoincrement())
   title         String
   description   String
   imageSrc      String
@@ -40,22 +40,22 @@ model Listing {
   bathroomCount Int
   guestCount    Int
   locationValue Json
-  userId        String   @db.ObjectId
-  price         Int
+  userId        Int
+  price         Float
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id])
   reservations Reservation[]
 }
 
 model Reservation {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String?  @db.ObjectId
-  listingId  String?  @db.ObjectId
+  id         Int      @id @default(autoincrement())
+  userId     Int?
+  listingId  Int?
   startDate  DateTime
   endDate    DateTime
-  totalPrice Int
+  totalPrice Float
   createdAt  DateTime @default(now())
 
-  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user    User?    @relation(fields: [userId], references: [id])
+  listing Listing? @relation(fields: [listingId], references: [id])
 }
